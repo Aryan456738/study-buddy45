@@ -707,8 +707,10 @@ async function sendAsk(question) {
       question,
     });
     state.askHistory.push({ role: 'bot', text: html });
-  } catch {
-    state.askHistory.push({ role: 'bot', text: '<p>Something went wrong — mind trying again?</p>' });
+  } catch (e) {
+    const msg = e?.message || 'Something went wrong — mind trying again?';
+    state.askError = msg;
+    state.askHistory.push({ role: 'bot', text: `<p>${escapeHTML(msg)}</p>` });
   }
   state.askLoading = false; renderApp();
 }
@@ -956,9 +958,11 @@ function viewMindmap(tool) {
 
 // ── Ask My Notes ────────────────────────────────────────
 function viewAsk(tool) {
+  const error = state.askError ? `<p class="errmsg">${escapeHTML(state.askError)}</p>` : '';
   return renderToolHeader(tool, SUBTITLES.ask) + `
     <div class="chat-wrap" style="--accent:${tool.accent}">
       <div class="chat-log" id="chatLog">${renderChatLog(state.askHistory, 'checking your notes…', tool.accent, state.askLoading, {title:'ask away', body:'Try "what are the key definitions?" or "summarize section 2".'})}</div>
+      ${error}
       <form class="chat-input-row" id="askForm">
         <input type="text" id="askInput" placeholder="Ask something about your material…" autocomplete="off" ${state.askLoading?'disabled':''}>
         <button class="btn btn-primary" style="--accent:${tool.accent}" type="submit" ${state.askLoading?'disabled':''}>Ask</button>

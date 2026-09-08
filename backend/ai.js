@@ -7,7 +7,7 @@
  */
 
 const GROQ_API    = 'https://api.groq.com/openai/v1/chat/completions';
-const MODEL       = process.env.GROQ_MODEL || 'llama-3.3-70b-versatile';
+const MODEL       = process.env.GROQ_MODEL || 'openai/gpt-oss-20b';
 const MAX_TOKENS  = 1000;
 
 // ── System prompts — one per tool ──────────────────────
@@ -35,22 +35,16 @@ function stripFence(text) {
 
 function extractJSON(text) {
   let t = stripFence(text);
-  const first = Math.min(...['{', '['].map(c => { const i = t.indexOf(c); return i < 0 ? Infinity : i; }));
+  const first = Math.min(...['{', '['].map(c => {
+    const i = t.indexOf(c);
+    return i < 0 ? Infinity : i;
+  }));
   const last  = Math.max(...['}', ']'].map(c => t.lastIndexOf(c)).filter(i => i >= 0));
   if (first !== Infinity) t = t.slice(first, last + 1);
   return JSON.parse(t);
 }
 
-// ── Core caller ────────────────────────────────────────
-/**
- * callClaude(userPrompt, systemPrompt)
- * Returns { html } for HTML-mode tools,
- *         { json } for JSON-mode tools.
- * Throws on API failure.
- */
-export async function callClaude(userPrompt, systemPrompt) {
-  const isJsonMode = systemPrompt.includes('strict JSON');
-
+async function requestGroq(userPrompt, systemPrompt, extraBody = {}) {
   const res = await fetch(GROQ_API, {
     method:  'POST',
     headers: {
@@ -65,6 +59,7 @@ export async function callClaude(userPrompt, systemPrompt) {
         { role: 'system', content: systemPrompt },
         { role: 'user', content: userPrompt },
       ],
+      ...extraBody,
     }),
   });
 
@@ -77,6 +72,19 @@ export async function callClaude(userPrompt, systemPrompt) {
   const data = await res.json();
   const text = data.choices?.[0]?.message?.content || '';
   if (!text.trim()) throw new Error('Empty response from Groq');
+  return text;
+}
+
+// ── Core caller ────────────────────────────────────────
+/**
+ * callClaude(userPrompt, systemPrompt)
+ * Returns { html } for HTML-mode tools,
+ *         { json } for JSON-mode tools.
+ * Throws on API failure.
+ */
+export async function callClaude(userPrompt, systemPrompt) {
+  const isJsonMode = systemPrompt.includes('strict JSON');
+  const text = await requestGroq(userPrompt, systemPrompt);
 
   if (isJsonMode) {
     return { json: extractJSON(text) };

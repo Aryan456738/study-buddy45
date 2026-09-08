@@ -14,7 +14,12 @@ export function validateSource({ sourceText } = {}) {
 }
 
 /** Validates chat requests (Ask My Notes, Doubt Solver) */
-export function validateChat({ question, history } = {}, requireSource = true) {
+export function validateChat({ sourceText, question, history } = {}, requireSource = true) {
+  if (requireSource) {
+    if (!sourceText || typeof sourceText !== 'string') return 'sourceText is required';
+    if (sourceText.trim().length < 20) return 'sourceText is too short (min 20 characters)';
+  }
+
   if (!question || typeof question !== 'string') return 'question is required';
   if (question.trim().length < 1)  return 'question cannot be empty';
   if (question.length > 2000)      return 'question is too long (max 2000 characters)';
