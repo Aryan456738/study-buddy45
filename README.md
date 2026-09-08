@@ -9,7 +9,7 @@ An AI-powered personalized study assistant designed to help students turn their 
 
 ## 🚀 Live Demo
 
-👉 [Study Buddy – Live Demo](https://study-buddy-u3ha.onrender.com/)
+👉 [Study Buddy – Live Demo](https://study-buddy45.onrender.com/)
 
 ✨ Features
 
@@ -38,3 +38,8 @@ An AI-powered personalized study assistant designed to help students turn their 
 - REST API
 - LLM
 
+This project helped me learn more about building AI-powered web applications, designing user-focused interfaces, and connecting frontend applications with backend AI services.
+
+I’m continuing to improve Study Buddy with more features and a better overall learning experience. 🚀
+
+#StudyBuddy #AI #ArtificialIntelligence #WebDevelopment #JavaScript #StudentProject #Learning #LLM #EducationTechnology #ComputerScience
