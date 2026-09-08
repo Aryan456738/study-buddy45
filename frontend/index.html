@@ -139,27 +139,36 @@ select:focus-visible, summary:focus-visible {
 
 /* --- Responsive: collapse sidebar to icon strip --- */
 @media (max-width: 760px) {
-  .app-shell { flex-direction: column; min-height: auto; }
+  .app-shell { display: block; min-height: 100vh; }
   .sidebar {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
     width: 100%;
-    padding: 14px 12px 10px;
-    gap: 10px;
+    z-index: 50;
+    background: linear-gradient(180deg, #1B2534, #141C29);
+    border-top: 1px solid rgba(255,255,255,.12);
+    padding: 8px 8px calc(8px + env(safe-area-inset-bottom, 0px));
+    gap: 0;
   }
   .sidebar::before { display: none; }
-  .brand { padding: 0 2px; }
-  .brand h1 { font-size: 20px; }
-  .brand p { font-size: 16px; margin-top: 1px; }
+  .brand { display: none; }
   .sidebar-footer { display: none; }
   .nav {
     flex-direction: row;
     overflow-x: auto;
     overflow-y: hidden;
-    gap: 8px;
-    padding-bottom: 2px;
+    gap: 6px;
+    width: 100%;
+    padding: 0;
+    -webkit-overflow-scrolling: touch;
   }
-  .main { padding-left: 0; }
-  .main::before { left: 16px; }
-  .main-inner { padding: 20px 14px 36px 26px; }
+  .main { width: 100%; padding-left: 0; }
+  .main::before { left: 14px; }
+  .main-inner {
+    padding: 20px 12px calc(92px + env(safe-area-inset-bottom, 0px)) 24px;
+  }
 }
 </style>
 
@@ -211,23 +220,24 @@ select:focus-visible, summary:focus-visible {
 @media (max-width: 760px) {
   .nav-item {
     flex: 0 0 auto;
-    min-width: 48px;
+    min-width: 46px;
     justify-content: center;
-    padding: 9px;
+    padding: 9px 8px;
     border-radius: 8px;
-    border-right: 1px solid rgba(255,255,255,0.1);
+    border-right: 1px solid rgba(255,255,255,0.08);
+    background: rgba(255,255,255,0.05);
   }
   .nav-item .lbl { display: none; }
   .nav-item::after {
-    left: 8px;
-    right: 8px;
+    left: 7px;
+    right: 7px;
     top: auto;
     bottom: 0;
     width: auto;
     height: 3px;
     border-radius: 999px;
   }
-  .nav-item.active { transform: translateY(-1px); }
+  .nav-item.active { transform: translateY(-1px); background: rgba(255,255,255,0.12); }
 }
 </style>
 
