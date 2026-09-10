@@ -30,8 +30,8 @@ An AI-powered personalized study assistant designed to help students turn their 
 .🤔 General academic doubt solver
 
 ## 📖 User Manual
+[📄 View User Manual](docs/Study-Buddy-User-Manual.pdf)
 
-👉 [View Study Buddy User Manual](Study_Buddy_User_Manual_How_To_Use.docx)
 
 ## 🛠️ Tech Stack
 
